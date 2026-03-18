@@ -127,7 +127,7 @@ const LogInForm = () => {
 
                         <Button
                             type="submit"
-                            className="h-11 w-full rounded-xl bg-slate-900 text-white transition hover:bg-slate-800"
+                            className="h-11 w-full cursor-pointer rounded-xl bg-slate-900 text-white transition hover:bg-slate-800"
                             disabled={isSubmitting}
                         >
                             {isSubmitting ? (
@@ -152,7 +152,7 @@ const LogInForm = () => {
                         <Button
                             type="button"
                             variant="outline"
-                            className="h-11 w-full rounded-xl border-white/70 bg-white/70 text-slate-800 hover:bg-white"
+                            className="h-11 w-full rounded-xl border-black/70 bg-white/70 text-slate-800 hover:bg-white cursor-pointer transition hover:border-slate-900 hover:text-slate-900"
                             onClick={onGoogleLogin}
                         >
                             <GoogleLogo />
