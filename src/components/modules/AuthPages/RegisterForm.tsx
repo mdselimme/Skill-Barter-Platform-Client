@@ -19,9 +19,12 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import GoogleLogo from "@/assets/logoComponent/GoogleLogo"
+import { signUpAccountAction } from "@/actions/auth/sign-up.action"
+import { useRouter } from "next/navigation"
 
 const passwordRule = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/
 
+//register form validation schema
 const registerSchema = z
     .object({
         fullName: z
@@ -45,6 +48,10 @@ const registerSchema = z
 type RegisterSchema = z.infer<typeof registerSchema>
 
 const RegisterForm = () => {
+
+    const router = useRouter();
+
+    //react hook form validation
     const {
         register,
         handleSubmit,
@@ -60,20 +67,41 @@ const RegisterForm = () => {
         },
     })
 
+    //submit register form
     const onSubmit = async (values: RegisterSchema) => {
-        await new Promise((resolve) => setTimeout(resolve, 900))
 
-        toast.success("Account ready to create", {
-            description: `Welcome ${values.fullName}, connect this form to your API next.`,
-        })
-
-        reset({
-            fullName: values.fullName,
+        const registerData = {
+            name: values.fullName,
             email: values.email,
-            password: "",
-            confirmPassword: "",
-        })
-    }
+            password: values.password,
+        };
+
+        const result = await signUpAccountAction(registerData);
+
+        if (!result.success) {
+            toast.error("Registration failed", {
+                description: result.message,
+            });
+            return;
+        }
+
+        if (result.success) {
+            toast.success("Registration successful", {
+                description: result.message,
+            });
+
+            router.push("/login");
+
+            reset({
+                fullName: values.fullName,
+                email: values.email,
+                password: "",
+                confirmPassword: "",
+            });
+
+        }
+
+    };
 
     const onGoogleSignUp = () => {
         toast.info("Google sign up clicked", {
