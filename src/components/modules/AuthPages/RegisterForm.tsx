@@ -1,7 +1,8 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
-import { ArrowRight, Loader2, Lock, Mail, Sparkles, UserRound } from "lucide-react"
+import { ArrowRight, Eye, EyeOff, Loader2, Lock, Mail, Sparkles, UserRound } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -50,6 +51,8 @@ type RegisterSchema = z.infer<typeof registerSchema>
 const RegisterForm = () => {
 
     const router = useRouter();
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     //react hook form validation
     const {
@@ -174,12 +177,20 @@ const RegisterForm = () => {
                                 <Lock className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                                 <Input
                                     id="password"
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     placeholder="Create a strong password"
-                                    className="h-11 rounded-xl border-input bg-background/80 pl-9 text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/30"
+                                    className="h-11 rounded-xl border-input bg-background/80 px-9 text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/30"
                                     aria-invalid={Boolean(errors.password)}
                                     {...register("password")}
                                 />
+                                <button
+                                    type="button"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-foreground cursor-pointer"
+                                    onClick={() => setShowPassword((prev) => !prev)}
+                                    aria-label={showPassword ? "Hide password" : "Show password"}
+                                >
+                                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                                </button>
                             </div>
                             {errors.password ? (
                                 <FieldError>{errors.password.message}</FieldError>
@@ -196,12 +207,20 @@ const RegisterForm = () => {
                                 <Lock className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                                 <Input
                                     id="confirmPassword"
-                                    type="password"
+                                    type={showConfirmPassword ? "text" : "password"}
                                     placeholder="Re-enter your password"
-                                    className="h-11 rounded-xl border-input bg-background/80 pl-9 text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/30"
+                                    className="h-11 rounded-xl border-input bg-background/80 px-9 text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/30"
                                     aria-invalid={Boolean(errors.confirmPassword)}
                                     {...register("confirmPassword")}
                                 />
+                                <button
+                                    type="button"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-foreground cursor-pointer"
+                                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                                    aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                                >
+                                    {showConfirmPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                                </button>
                             </div>
                             {errors.confirmPassword ? (
                                 <FieldError>{errors.confirmPassword.message}</FieldError>
