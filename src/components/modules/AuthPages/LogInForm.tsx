@@ -1,7 +1,8 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
-import { ArrowRight, Loader2, Lock, Mail, Sparkles } from "lucide-react"
+import { ArrowRight, Eye, EyeOff, Loader2, Lock, Mail, Sparkles } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -32,6 +33,7 @@ const logInSchema = z.object({
 type LogInSchema = z.infer<typeof logInSchema>
 
 const LogInForm = () => {
+    const [showPassword, setShowPassword] = useState(false)
 
     //form validation
     const {
@@ -126,12 +128,20 @@ const LogInForm = () => {
                                     <Lock className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
                                     <Input
                                         id="password"
-                                        type="password"
+                                        type={showPassword ? "text" : "password"}
                                         placeholder="Enter your password"
-                                        className="h-11 rounded-xl border-input bg-background/80 pl-9 text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/30"
+                                        className="h-11 rounded-xl border-input bg-background/80 pr-10 pl-9 text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/30"
                                         aria-invalid={Boolean(errors.password)}
                                         {...register("password")}
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword((prev) => !prev)}
+                                        className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:cursor-pointer hover:text-foreground"
+                                        aria-label={showPassword ? "Hide password" : "Show password"}
+                                    >
+                                        {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                                    </button>
                                 </div>
                             </FieldContent>
                             {errors.password ? (
