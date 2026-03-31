@@ -19,7 +19,9 @@ import { Field, FieldContent, FieldError, FieldLabel } from "@/components/ui/fie
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import GoogleLogo from "@/assets/logoComponent/GoogleLogo"
+import { logInAccountAction } from "@/actions/auth/login.action"
 
+// Define Zod schema for form validation
 const logInSchema = z.object({
     email: z.email("Please enter a valid email address."),
     password: z
@@ -30,6 +32,8 @@ const logInSchema = z.object({
 type LogInSchema = z.infer<typeof logInSchema>
 
 const LogInForm = () => {
+
+    //form validation
     const {
         register,
         handleSubmit,
@@ -42,13 +46,23 @@ const LogInForm = () => {
         },
     })
 
+    // Handle login form submission
     const onSubmit = async (values: LogInSchema) => {
-        await new Promise((resolve) => setTimeout(resolve, 700))
-
-        toast.success("Login request submitted", {
-            description: `Welcome back, ${values.email}.`,
-        })
-    }
+        const logInData = {
+            email: values.email,
+            password: values.password,
+        }
+        const result = await logInAccountAction(logInData)
+        if (result.success) {
+            toast.success(result.message || "Logged in successfully!", {
+                description: "Welcome back! Redirecting to your dashboard.",
+            })
+        } else {
+            toast.error("Login failed", {
+                description: result.message || "An error occurred during login. Please try again.",
+            })
+        }
+    };
 
     const onGoogleLogin = () => {
         toast.info("Google login clicked", {
