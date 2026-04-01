@@ -2,18 +2,21 @@
 
 import Image from "next/image"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Bell } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 
 const navItems = [
-    { label: "Home", href: "/", active: true },
+    { label: "Home", href: "/" },
     { label: "Market", href: "/market" },
     { label: "Sessions", href: "/sessions" },
     { label: "Profile", href: "/profile" },
 ]
 
 export default function Header() {
+    const pathname = usePathname()
+
     return (
         <header className="fixed top-0 z-50 w-full border-b border-border/40 glass-effect shadow-[0px_20px_40px_rgba(44,47,49,0.06)]">
             <div className="mx-auto flex w-full max-w-screen-2xl items-center justify-between px-4 py-4 sm:px-6 md:px-8">
@@ -25,19 +28,24 @@ export default function Header() {
                 </Link>
 
                 <nav className="hidden items-center gap-8 font-headline text-sm font-medium tracking-wide md:flex">
-                    {navItems.map((item) => (
-                        <Link
-                            key={item.label}
-                            href={item.href}
-                            className={
-                                item.active
-                                    ? "border-b-2 border-primary pb-1 text-primary"
-                                    : "text-muted-foreground transition-colors hover:text-primary"
-                            }
-                        >
-                            {item.label}
-                        </Link>
-                    ))}
+                    {navItems.map((item) => {
+                        const isActive = pathname === item.href
+
+                        return (
+                            <Link
+                                key={item.label}
+                                href={item.href}
+                                aria-current={isActive ? "page" : undefined}
+                                className={
+                                    isActive
+                                        ? "border-b-2 border-primary pb-1 text-primary"
+                                        : "text-muted-foreground transition-colors hover:text-primary"
+                                }
+                            >
+                                {item.label}
+                            </Link>
+                        )
+                    })}
                 </nav>
 
                 <div className="flex items-center gap-2 sm:gap-4">
