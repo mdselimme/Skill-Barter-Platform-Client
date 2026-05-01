@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Geist, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Sonner } from "@/components/ui/sonner";
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta-sans",
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
 const inter = Inter({
   variable: "--font-inter",
+  subsets: ["latin"],
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta-sans",
   subsets: ["latin"],
 });
 
@@ -25,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${plusJakartaSans.variable} ${inter.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${inter.variable} ${plusJakartaSans.variable} antialiased`}>
         {children}
         <Sonner />
       </body>
